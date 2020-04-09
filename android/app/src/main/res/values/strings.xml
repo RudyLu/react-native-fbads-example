@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">fb_native_demo</string>
+    <string name="facebook_app_id">198984578005724</string>
 </resources>
