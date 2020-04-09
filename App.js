@@ -10,6 +10,9 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { NativeAdsManager, AdSettings } from 'react-native-fbads';
+
+import NativeAdView from './src/NativeAdView';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,31 +21,24 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+AdSettings.clearTestDevices();
+AdSettings.setLogLevel('debug');
+AdSettings.addTestDevice(AdSettings.currentDeviceHash);
+
+const adsManager = new NativeAdsManager('526836238189901_559425528264305');
+
 type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <LoginButton
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                console.log("login has error: " + result.error);
-              } else if (result.isCancelled) {
-                console.log("login is cancelled.");
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    console.log(data.accessToken.toString())
-                  }
-                )
-              }
-            }
-          }
-          onLogoutFinished={() => console.log("logout.")}/>
+      <View
+        style={{
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+          padding: 20,
+        }}
+      >
+        <NativeAdView adsManager={adsManager} adChoicePosition="bottomRight" />
       </View>
     );
   }
